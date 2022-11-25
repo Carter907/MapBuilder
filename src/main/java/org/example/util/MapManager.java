@@ -21,6 +21,7 @@ import java.util.ArrayList;
 public class MapManager {
 
     private File currentFile;
+    private FileChooser fileChooser;
     private ArrayList<Beeper> beepers;
     private ArrayList<Wall> walls;
     private int worldWidth;
@@ -28,11 +29,11 @@ public class MapManager {
     private Editor editor;
 
     public MapManager(Editor editor) {
-
         this.editor = editor;
         this.beepers = new ArrayList<>();
         this.walls = new ArrayList<>();
         this.currentFile = null;
+        this.fileChooser = new FileChooser();
         this.worldWidth = 0;
         this.worldHeight = 0;
     }
@@ -51,6 +52,7 @@ public class MapManager {
     public void setCurrentFile(File currentFile) {
         editor.getAppStart().getWindow().setTitle("MapBuilder\t" + currentFile);
         this.currentFile = currentFile;
+        this.fileChooser.setInitialDirectory(currentFile.getParentFile());
     }
 
     public void loadMap(File fileChosen) {
@@ -368,7 +370,7 @@ public class MapManager {
     }
 
     public File getSaveFile() {
-        FileChooser fileChooser = new FileChooser();
+
         fileChooser.setTitle("choose save location");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("map files", "*.MAP"));
 
@@ -377,7 +379,6 @@ public class MapManager {
 
     public File getOpenFile() {
 
-        FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("map files", "*.map"));
         fileChooser.setTitle("choose a map file to open");
 
