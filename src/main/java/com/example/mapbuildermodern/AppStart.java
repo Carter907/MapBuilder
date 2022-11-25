@@ -95,6 +95,8 @@ public class AppStart extends Application {
         primaryStage.setOnHidden(e -> {
             System.exit(0);
         });
+
+
     }
 
     private Pane setAnimation() {
