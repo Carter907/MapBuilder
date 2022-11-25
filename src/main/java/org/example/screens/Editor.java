@@ -67,6 +67,8 @@ public class Editor extends BorderPane {
         setBackground(new Background(new BackgroundImage(new Image("assets/EditorBackground.png"),
                 BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT)));
 
+        setRight(initializeRight());
+        setTop(initializeTop());
         update();
 
         System.out.println("\nEditor Set: width=" + width + ", height=" + height);
@@ -235,8 +237,7 @@ public class Editor extends BorderPane {
     public void update() {
         Cell.cellSize = (int) (450 * (1 / (double) width));
         setCenter(initializeCenter());
-        setRight(initializeRight());
-        setTop(initializeTop());
+
 
     }
 
