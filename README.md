@@ -1,5 +1,5 @@
 # MapBuilder
-Java 8 jar -> target/classes
+Java 8 classes -> target/classes
 
 Java 17 classes -> target/java 17 target/classes
 
