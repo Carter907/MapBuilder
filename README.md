@@ -3,6 +3,8 @@ Java 8 jar -> target/classes/MapBuilder.jar
 
 Java 17 jar -> target/java 17 target/MapBuilderModern-1.0-SNAPSHOT.jar
 
+(Both stored in latest release as well)
+
 ### Title Screen
 picture of Title Screen
 
