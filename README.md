@@ -4,7 +4,7 @@ Java 8 classes -> target/classes
 Java 17 classes -> target/java 17 target/classes
 
 ### Jar Location
-- look in `Releases` for the latest release. contains both Java 17 and 8 jars. MapBuilder.jar is Java 8 while SNAPSHOT is Java 17. (Jar with the smaller size is Java 8)
+- look in `Releases` for the latest release. contains two different jars: MapBuilder.jar is Java 8 while SNAPSHOT is Java 17. (Jar with the smaller size is Java 8)
 
 ### Features
 - put down beepers
