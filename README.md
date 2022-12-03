@@ -9,7 +9,7 @@ Java 17 classes -> target/java 17 target/classes
 ### JavaFX requirements
 - if you are using the Java 17 version, make sure you are using the correct JavaFX version as well which is version 20-ea+7
 
-(see [visit the repo](https://mvnrepository.com/artifact/org.openjfx/javafx-controls) for more details)
+( [visit the repo](https://mvnrepository.com/artifact/org.openjfx/javafx-controls) for more details )
 
 ### Features
 - put down beepers
