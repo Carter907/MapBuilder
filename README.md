@@ -7,7 +7,7 @@ Java 17 classes -> target/java 17 target/classes
 - look in `Releases` for the latest release. You will see two different jars: MapBuilder.jar is Java 8 while SNAPSHOT is Java 17. (Jar with the smaller size is Java 8)
 
 ### JavaFX requirements
-- if you are using the Java 17 version, make sure you are using the correct JavaFX version as well which is version 19
+- if you are using the Java 17 version, make sure you are using the correct JavaFX version as well which is version 20-ea+7
 
 ### Features
 - put down beepers
