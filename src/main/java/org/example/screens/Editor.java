@@ -83,7 +83,7 @@ public class Editor extends BorderPane {
         Menu file = new Menu("File");
 
         MapManager mapper = new MapManager(this);
-        MenuItem startNewFile = new MenuItem("Start New File");
+        MenuItem startNewFile = new MenuItem("New");
 
         TextInputDialog sizeRequest = new TextInputDialog();
         ImageView icon = new ImageView("assets/Karel_Icon.png");
@@ -115,7 +115,7 @@ public class Editor extends BorderPane {
             setEditorHeight(worldSize.getY());
             update();
         });
-        MenuItem openFile = new MenuItem("Open File");
+        MenuItem openFile = new MenuItem("Open...");
         openFile.setOnAction(e -> {
             File fileChosen = mapper.getOpenFile();
             if (fileChosen == null)
@@ -127,9 +127,9 @@ public class Editor extends BorderPane {
 
 
         });
-        MenuItem saveFile = new MenuItem("Save File");
+        MenuItem saveAs = new MenuItem("Save As...");
 
-        saveFile.setOnAction(e -> {
+        saveAs.setOnAction(e -> {
             File fileChosen = mapper.getSaveFile();
             if (fileChosen == null)
                 return;
@@ -137,9 +137,19 @@ public class Editor extends BorderPane {
             mapper.saveMap(fileChosen);
         });
 
+        MenuItem saveFile = new MenuItem("Save");
+
+        saveFile.setOnAction(e -> {
+
+            if (mapper.getCurrentFile() == null)
+                return;
+            mapper.constructMap(parseGrid((GridPane) appStart.getNodeManager().retrieve("cells")));
+            mapper.saveMap(mapper.getCurrentFile());
+        });
+
         file.getItems().
 
-                addAll(startNewFile, openFile, saveFile);
+                addAll(startNewFile, openFile, saveFile, saveAs);
         menuBar.getMenus().
 
                 add(file);
