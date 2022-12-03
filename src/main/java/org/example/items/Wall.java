@@ -1,6 +1,9 @@
 package org.example.items;
 
+import org.example.edit.Cell;
+
 public class Wall {
+
 
     public enum WallStyle {
 
@@ -18,6 +21,7 @@ public class Wall {
         this.y = y;
         this.style = null;
         this.length = 1;
+
     }
 
     public Wall(int x, int y, WallStyle style ) {
@@ -28,11 +32,14 @@ public class Wall {
 
     }
 
+
     public Wall(int x, int y, int length, WallStyle style ) {
         this.x = x;
         this.y = y;
         this.length = length;
         this.style = style;
+
+
 
     }
 
@@ -67,6 +74,7 @@ public class Wall {
     public int getY() {
         return y;
     }
+
 
     @Override
     public String toString () {

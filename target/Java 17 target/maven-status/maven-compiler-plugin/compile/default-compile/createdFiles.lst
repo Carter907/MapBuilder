@@ -1,6 +1,6 @@
 com\example\mapbuildermodern\items\Beeper.class
 com\example\mapbuildermodern\edit\Cell$Outer.class
-org\example\util\NodeManager.class
+com\example\mapbuildermodern\util\NodeManager.class
 com\example\mapbuildermodern\items\BeeperGUI.class
 com\example\mapbuildermodern\Main.class
 module-info.class
