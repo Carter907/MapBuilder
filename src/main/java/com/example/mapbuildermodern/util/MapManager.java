@@ -6,6 +6,7 @@ import com.example.mapbuildermodern.items.Wall;
 import com.example.mapbuildermodern.screens.Editor;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
@@ -15,12 +16,14 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class MapManager {
 
     private File currentFile;
+    private FileChooser fileChooser;
     private ArrayList<Beeper> beepers;
     private ArrayList<Wall> walls;
     private int worldWidth;
@@ -28,11 +31,11 @@ public class MapManager {
     private Editor editor;
 
     public MapManager(Editor editor) {
-
         this.editor = editor;
         this.beepers = new ArrayList<>();
         this.walls = new ArrayList<>();
         this.currentFile = null;
+        this.fileChooser = new FileChooser();
         this.worldWidth = 0;
         this.worldHeight = 0;
     }
@@ -43,7 +46,6 @@ public class MapManager {
     }
 
 
-
     public File getCurrentFile() {
         return currentFile;
     }
@@ -51,10 +53,11 @@ public class MapManager {
     public void setCurrentFile(File currentFile) {
         editor.getAppStart().getWindow().setTitle("MapBuilder\t" + currentFile);
         this.currentFile = currentFile;
+        this.fileChooser.setInitialDirectory(currentFile.getParentFile());
     }
 
     public void loadMap(File fileChosen) {
-            setCurrentFile(fileChosen);
+        setCurrentFile(fileChosen);
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
@@ -125,7 +128,7 @@ public class MapManager {
                                         x = Integer.parseInt(attribute.getNodeValue())-1;
                                         break;
                                     case "y":
-                                        y = worldHeight-Integer.parseInt(attribute.getNodeValue());
+                                        y = worldHeight - Integer.parseInt(attribute.getNodeValue());
                                         break;
 
                                 }
@@ -145,18 +148,19 @@ public class MapManager {
                                         style = Wall.WallStyle.valueOf(attribute.getNodeValue().toUpperCase());
                                         break;
                                     case "x":
-                                        x = Integer.parseInt(attribute.getNodeValue())-1;
+                                        x = Integer.parseInt(attribute.getNodeValue());
                                         System.out.println("beeper Y: " + y);
                                         break;
                                     case "y":
-                                        y = worldHeight-Integer.parseInt(attribute.getNodeValue());
+                                        y = worldHeight - Integer.parseInt(attribute.getNodeValue());
                                         System.out.println("beeper Y: " + y);
                                         break;
                                     case "length":
                                         length = Integer.parseInt(attribute.getNodeValue());
                                 }
                             }
-
+                            if (style == Wall.WallStyle.HORIZONTAL)
+                                x--;
                             Wall wall = new Wall(x, y, length, style);
                             walls.add(wall);
 
@@ -189,7 +193,7 @@ public class MapManager {
             for (Cell cell : row) {
                 Beeper beeper = cell.getBeeperGUIManager().getBeeperBacking();
                 if (beeper.getNum() != 0)
-                beepers.add(beeper);
+                    beepers.add(beeper);
 
                 for (Cell.Outer wall : cell.getCellWalls()) {
                     if (!wall.isUnusable() && wall.isWall())
@@ -216,10 +220,10 @@ public class MapManager {
             Element defaultSize = mapFile.createElement("defaultSize");
             properties.appendChild(defaultSize);
             Attr defaultWidth = mapFile.createAttribute("width");
-            defaultWidth.setValue(editor.getEditorWidth()+"");
+            defaultWidth.setValue(editor.getEditorWidth() + "");
             defaultSize.setAttributeNode(defaultWidth);
             Attr defaultHeight = mapFile.createAttribute("height");
-            defaultHeight.setValue(editor.getEditorHeight()+"");
+            defaultHeight.setValue(editor.getEditorHeight() + "");
             defaultSize.setAttributeNode(defaultHeight);
             Element objects = mapFile.createElement("objects");
             world.appendChild(objects);
@@ -230,12 +234,12 @@ public class MapManager {
 
                 Attr x = mapFile.createAttribute("x");
 
-                x.setValue(beeper.getX()+1+"");
+                x.setValue(beeper.getX() + 1 + "");
                 Attr y = mapFile.createAttribute("y");
 
-                y.setValue(editor.getEditorHeight()-beeper.getY()+"");
+                y.setValue(editor.getEditorHeight() - beeper.getY() + "");
                 Attr num = mapFile.createAttribute("num");
-                num.setValue(beeper.getNum()+"");
+                num.setValue(beeper.getNum() + "");
 
                 element.setAttributeNode(x);
                 element.setAttributeNode(y);
@@ -250,13 +254,15 @@ public class MapManager {
                 style.setValue(wall.getStyle().toString().toLowerCase());
 
                 Attr x = mapFile.createAttribute("x");
-                x.setValue(wall.getX()+1+"");
+                x.setValue(wall.getX() + "");
+                if (wall.getStyle() == Wall.WallStyle.HORIZONTAL)
+                    x.setValue((wall.getX()+1)+"");
 
                 Attr y = mapFile.createAttribute("y");
-                y.setValue(editor.getEditorHeight()-wall.getY()+"");
+                y.setValue(editor.getEditorHeight() - wall.getY() + "");
 
                 Attr length = mapFile.createAttribute("length");
-                length.setValue(wall.getLength()+"");
+                length.setValue(wall.getLength() + "");
 
                 element.setAttributeNode(style);
                 element.setAttributeNode(x);
@@ -292,31 +298,61 @@ public class MapManager {
             cells[beeper.getY()][beeper.getX()].setBeepers(beeper.getNum());
         }
         for (Wall wall : walls) {
+            int y = wall.getY(), x = wall.getX();
 
             if (wall.getStyle().equals(Wall.WallStyle.HORIZONTAL)) {
-                Cell cell = cells[wall.getY()][wall.getX()];
+                Cell.Outer top, bot;
+                Cell cell;
+                if (y != cells.length) {
+                    cell = cells[y][x];
+                    top = (Cell.Outer) cell.getCellManager().retrieve("top");
 
-                Cell.Outer top = (Cell.Outer) cell.getCellManager().retrieve("top");
-                if (!top.isUnusable())
-                    top.setWall(true);
-                else {
-                    cell = cells[wall.getY()-1][wall.getX()];
-                    Cell.Outer bot = (Cell.Outer) cell.getCellManager().retrieve("bot");
+
+                    if (!top.isUnusable())
+                        top.setWall(true);
+                    else {
+                        cell = cells[y - 1][x];
+                        bot = (Cell.Outer) cell.getCellManager().retrieve("bot");
+                        if (!bot.isUnusable())
+                            bot.setWall(true);
+
+                    }
+                } else {
+                    cell = cells[y - 1][x];
+                    bot = (Cell.Outer) cell.getCellManager().retrieve("bot");
                     if (!bot.isUnusable())
                         bot.setWall(true);
                 }
-            } else if (wall.getStyle().equals(Wall.WallStyle.VERTICAL)) {
-                Cell cell = cells[wall.getY()][wall.getX()];
 
-                Cell.Outer right = (Cell.Outer) cell.getCellManager().retrieve("right");
-                if (!right.isUnusable())
-                    right.setWall(true);
-                else {
-                    cell = cells[wall.getY()][wall.getX()-1];
-                    Cell.Outer left = (Cell.Outer) cell.getCellManager().retrieve("left");
+            } else if (wall.getStyle().equals(Wall.WallStyle.VERTICAL)) {
+                Cell.Outer left, right;
+                Cell cell;
+                if (x != cells[0].length) {
+                    cell = cells[y][x];
+                    left = (Cell.Outer) cell.getCellManager().retrieve("left");
+                    right = (Cell.Outer) cell.getCellManager().retrieve("right");
+
+
                     if (!left.isUnusable())
                         left.setWall(true);
+
+                    else {
+                        cell = cells[y][x - 1];
+                        right = (Cell.Outer) cell.getCellManager().retrieve("right");
+                        if (!right.isUnusable())
+                            right.setWall(true);
+
+                    }
+
+                } else {
+                    cell = cells[y][x - 1];
+                    right = (Cell.Outer) cell.getCellManager().retrieve("right");
+                    if (!right.isUnusable())
+                        right.setWall(true);
+
                 }
+
+
             }
         }
 
@@ -368,7 +404,7 @@ public class MapManager {
     }
 
     public File getSaveFile() {
-        FileChooser fileChooser = new FileChooser();
+
         fileChooser.setTitle("choose save location");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("map files", "*.MAP"));
 
@@ -377,7 +413,6 @@ public class MapManager {
 
     public File getOpenFile() {
 
-        FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("map files", "*.map"));
         fileChooser.setTitle("choose a map file to open");
 

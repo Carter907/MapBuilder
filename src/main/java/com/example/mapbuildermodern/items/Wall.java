@@ -2,6 +2,7 @@ package com.example.mapbuildermodern.items;
 
 public class Wall {
 
+
     public enum WallStyle {
 
         HORIZONTAL,
@@ -18,6 +19,7 @@ public class Wall {
         this.y = y;
         this.style = null;
         this.length = 1;
+
     }
 
     public Wall(int x, int y, WallStyle style ) {
@@ -28,11 +30,14 @@ public class Wall {
 
     }
 
+
     public Wall(int x, int y, int length, WallStyle style ) {
         this.x = x;
         this.y = y;
         this.length = length;
         this.style = style;
+
+
 
     }
 
@@ -67,6 +72,7 @@ public class Wall {
     public int getY() {
         return y;
     }
+
 
     @Override
     public String toString () {

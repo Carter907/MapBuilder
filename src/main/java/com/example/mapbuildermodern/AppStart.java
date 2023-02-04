@@ -1,5 +1,6 @@
 package com.example.mapbuildermodern;
 import com.example.mapbuildermodern.screens.Editor;
+import com.example.mapbuildermodern.util.NodeManager;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -17,7 +18,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-import org.example.util.NodeManager;
+
 
 import java.util.Date;
 import java.util.Timer;
@@ -51,7 +52,7 @@ public class AppStart extends Application {
 
         Label title = new Label("Karel Map Builder");
 
-        title.setFont(Font.font("Cascadia Code", FontWeight.NORMAL, FontPosture.REGULAR, 75));
+        title.setFont(Font.font("Times New Roman", FontWeight.NORMAL, FontPosture.REGULAR, 75));
         title.setGraphicTextGap(20);
 
         ImageView icon = new ImageView(getClass().getResource("assets/Karel_Icon.png").toExternalForm());

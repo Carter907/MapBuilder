@@ -1,4 +1,4 @@
-package org.example.util;
+package com.example.mapbuildermodern.util;
 
 import javafx.scene.Node;
 

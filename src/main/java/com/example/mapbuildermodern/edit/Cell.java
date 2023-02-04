@@ -1,8 +1,10 @@
 package com.example.mapbuildermodern.edit;
 
+
 import com.example.mapbuildermodern.items.BeeperGUI;
 import com.example.mapbuildermodern.items.Wall;
 import com.example.mapbuildermodern.screens.Editor;
+import com.example.mapbuildermodern.util.NodeManager;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.geometry.Pos;
@@ -15,7 +17,6 @@ import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
-import org.example.util.NodeManager;
 
 import java.util.ArrayList;
 
@@ -172,18 +173,26 @@ public class Cell extends Group {
         private Wall wallBacking;
 
         private boolean unusable;
+        private boolean beginning;
 
         public Outer(Rectangle origin, Pos orientation, boolean big) {
 
             extendWidth = (origin.getHeight() / size) / Math.tan(Math.toRadians(45));
             extendHeight = (origin.getWidth() / size) * Math.tan(Math.toRadians(45));
             unusable = false;
+            this.beginning = false;
             this.wall = false;
             this.big = big;
             this.orientation = orientation;
             wallBacking = new Wall(Cell.this.colIndex, Cell.this.rowIndex);
-            if (orientation == Pos.BOTTOM_CENTER)
-                wallBacking.setY(wallBacking.getY()+1);
+
+            if (wallBacking.getX() != 0 && (orientation != Pos.BOTTOM_CENTER && orientation != Pos.TOP_CENTER)) {
+
+                wallBacking.setX(wallBacking.getX()+1);
+
+            }
+
+
             switch (orientation) {
                 case TOP_CENTER:
                     wallBacking.setStyle(Wall.WallStyle.HORIZONTAL);
@@ -211,6 +220,7 @@ public class Cell extends Group {
                     wallBacking.setStyle(Wall.WallStyle.VERTICAL);
                     vertical = true;
                     horizontal = false;
+
                     if (big)
                         this.getElements().addAll(
                                 new MoveTo(-extendWidth, -origin.getHeight() / size),
@@ -234,6 +244,9 @@ public class Cell extends Group {
                 case CENTER_RIGHT:
                     wallBacking.setStyle(Wall.WallStyle.VERTICAL);
                     horizontal = false;
+                    if (wallBacking.getX() == 0)
+                        wallBacking.setX(1);
+
                     vertical = true;
                     if (big)
                         this.getElements().addAll(
@@ -261,6 +274,8 @@ public class Cell extends Group {
                     wallBacking.setStyle(Wall.WallStyle.HORIZONTAL);
                     horizontal = true;
                     vertical = false;
+                    if (wallBacking.getY() % 2 == 0 || wallBacking.getY() == editor.getEditorHeight()-1)
+                        wallBacking.setY(wallBacking.getY()+1);
                     if (big)
                         this.getElements().addAll(
                                 new MoveTo(origin.getWidth() + extendWidth, origin.getHeight() + origin.getHeight() / size),
@@ -313,8 +328,10 @@ public class Cell extends Group {
             if (!unusable) {
                 this.wall = wall;
                 setFill(wall ? Color.BLACK : Color.WHITE);
+
             }
         }
+
         public void setUnusable(boolean value) {
             this.setDisable(value);
             this.setWall(!value);

@@ -12,8 +12,7 @@ import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
+import javafx.scene.text.*;
 
 
 public class BeeperGUI extends Group {
@@ -61,9 +60,10 @@ public class BeeperGUI extends Group {
         countText.setScaleY(Cell.cellSize/45d);
 
 
-        countText.setTextAlignment(TextAlignment.CENTER);
+        countText.setTextAlignment(TextAlignment.LEFT);
         countText.setFill(Color.WHITE);
         countText.setTextOrigin(VPos.CENTER);
+        countText.setFont(Font.font(15));
         countText.setTranslateX(-(countText.getWrappingWidth())/2d-4);
         countText.setX(Cell.cellSize/2d);
         countText.setY(Cell.cellSize/2d);

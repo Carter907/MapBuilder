@@ -1,6 +1,6 @@
 .button {
     -fx-background-color: white;
-    -fx-font-family: "Cascadia Code";
+    -fx-font-family: "Times new Roman";
     -fx-font-size: 20;
     -fx-border-color: black;
     -fx-border-width: .5;
@@ -10,7 +10,7 @@
 
 .button:pressed {
     -fx-background-color: lightgray;
-    -fx-font-family: "Cascadia Code";
+    -fx-font-family: "Times New Roman";
     -fx-font-size: 22;
     -fx-border-color: black;
     -fx-border-width: .7;
@@ -19,7 +19,7 @@
 
 .combo-box {
     -fx-background-color:white;
-    -fx-font-family: "Cascadia Code";
+    -fx-font-family: "Times New Roman";
     -fx-font-size: 20;
     -fx-border-color: black;
     -fx-border-width: .5;
@@ -35,14 +35,14 @@
 }
 
 .list-view .cell {
-    -fx-font-family: "Cascadia Code";
+    -fx-font-family: "Times New Roman";
     -fx-font-size: 21;
     -fx-border-width: .7;
     -fx-border-radius: 5;
 }
 .list-view .cell:selected {
     -fx-background-color: lightgray;
-    -fx-font-family: "Cascadia Code";
+    -fx-font-family: "Times New Roman";
     -fx-font-size: 24;
     -fx-border-width: .7;
     -fx-border-radius: 5;
